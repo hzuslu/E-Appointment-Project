@@ -13,6 +13,7 @@
         public DateTime EndDate { get; set; }
         public bool IsCompleted { get; set; }
 
+
         // Navigation Properties
         public Doctor? Doctor { get; set; }
         public Patient? Patient { get; set; }
