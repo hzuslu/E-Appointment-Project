@@ -21,9 +21,6 @@ namespace eAppointmentServer.Infrastructure.Configurations
             builder.HasIndex(p => p.IdentityNumber)
                 .IsUnique();
 
-            builder.Property(p => p.FullName)
-                .HasComputedColumnSql("CONCAT(FirstName, ' ', LastName)");
-
             builder.Property(p => p.City)
                 .HasColumnType("varchar(100)")
                 .IsRequired();

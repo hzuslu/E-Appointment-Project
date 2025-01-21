@@ -26,10 +26,7 @@ namespace eAppointmentServer.Infrastructure
 
             services.AddIdentity<AppUser, AppRole>(action =>
             {
-                action.Password.RequiredLength = 6;
-                action.Password.RequireUppercase = true;
-                action.Password.RequireLowercase = true;
-                action.Password.RequireDigit = true;
+                action.Password.RequiredLength = 1;
                 action.User.RequireUniqueEmail = true;
             }).AddEntityFrameworkStores<ApplicationDbContext>();
 

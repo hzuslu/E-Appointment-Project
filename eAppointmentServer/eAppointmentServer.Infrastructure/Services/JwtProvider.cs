@@ -26,7 +26,7 @@ namespace eAppointmentServer.Infrastructure.Services
                 , Guid.NewGuid().ToString()
                 )));
 
-            SigningCredentials credentials = new(symmetricSecurityKey, SecurityAlgorithms.Sha256);
+            SigningCredentials credentials = new(symmetricSecurityKey, SecurityAlgorithms.HmacSha512Signature);
 
             JwtSecurityToken securityToken = new(
                 issuer: "Hasan Uslu",
@@ -39,7 +39,6 @@ namespace eAppointmentServer.Infrastructure.Services
             JwtSecurityTokenHandler tokenHandler = new();
             string token = tokenHandler.WriteToken(securityToken);
             return token;
-
         }
     }
 }

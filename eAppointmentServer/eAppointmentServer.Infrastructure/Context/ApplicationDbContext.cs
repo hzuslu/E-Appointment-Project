@@ -25,6 +25,7 @@ namespace eAppointmentServer.Infrastructure.Context
             builder.Ignore<IdentityUserToken<Guid>>();
             builder.Ignore<IdentityRoleClaim<Guid>>();
 
+            base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }

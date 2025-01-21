@@ -1,4 +1,5 @@
 ﻿using eAppointmentServer.Domain.Entities;
+using eAppointmentServer.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -22,9 +23,12 @@ namespace eAppointmentServer.Infrastructure.Configurations
                 .HasConversion<int>()
                 .IsRequired();
 
-            builder.Property(p => p.FullName)
-                .HasComputedColumnSql("CONCAT(FirstName, ' ', LastName)");
-
+            builder.Property(p => p.Department)
+                 .HasConversion(
+                        item => item.Value,
+                        item => DepartmentEnumaration.FromValue(item)
+                    ).HasColumnName("Department")
+                    .IsRequired();
         }
     }
 }
