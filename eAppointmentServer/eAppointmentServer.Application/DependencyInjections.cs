@@ -11,6 +11,8 @@ namespace eAppointmentServer.Application
                 configuration.RegisterServicesFromAssembly(typeof(DependencyInjections).Assembly);
             });
 
+            services.AddAutoMapper(typeof(DependencyInjections).Assembly);
+
             return services;
         }
     }
