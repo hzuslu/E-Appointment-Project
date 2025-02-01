@@ -1,5 +1,7 @@
 ﻿using eAppointmentServer.Application.Features.Doctors.CreateDoctor;
+using eAppointmentServer.Application.Features.Doctors.DeleteDoctorById;
 using eAppointmentServer.Application.Features.Doctors.GetAllDoctors;
+using eAppointmentServer.Application.Features.Doctors.UpdateDoctor;
 using eAppointmentServer.WebAPI.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +23,20 @@ namespace eAppointmentServer.WebAPI.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateDoctor(CreateDoctorCommand request, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(request, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteDoctorById(DeleteDoctorByIdCommand request, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(request, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateDoctor(UpdateDoctorCommand request, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(request, cancellationToken);
             return StatusCode(result.StatusCode, result);

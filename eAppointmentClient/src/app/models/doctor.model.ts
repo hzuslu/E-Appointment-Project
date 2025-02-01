@@ -3,5 +3,11 @@ export class DoctorModel {
 	firstName: string = "";
 	lastName: string = "";
 	fullName: string = "";
-	department: number = 0;
+	department: DepartmentModel = new DepartmentModel();
+	departmentValue: number = 0;
+}
+
+export class DepartmentModel {
+	name: string = "";
+	value: number = 0;
 }

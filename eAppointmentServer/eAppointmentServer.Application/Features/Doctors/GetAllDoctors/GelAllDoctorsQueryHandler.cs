@@ -6,7 +6,7 @@ using TS.Result;
 
 namespace eAppointmentServer.Application.Features.Doctors.GetAllDoctors
 {
-    public sealed record class GelAllDoctorsQueryHandler : IRequestHandler<GetAllDoctorsQuery, Result<List<Doctor>>>
+    internal sealed class GelAllDoctorsQueryHandler : IRequestHandler<GetAllDoctorsQuery, Result<List<Doctor>>>
     {
         private readonly IDoctorRepository doctorRepository;
 

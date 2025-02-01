@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using eAppointmentServer.Domain.Entities;
-using eAppointmentServer.Domain.Enums;
 using eAppointmentServer.Domain.Repositories;
 using GenericRepository;
 using MediatR;
@@ -8,7 +7,7 @@ using TS.Result;
 
 namespace eAppointmentServer.Application.Features.Doctors.CreateDoctor
 {
-    public sealed class CreateDoctorCommandHandler : IRequestHandler<CreateDoctorCommand, Result<string>>
+    internal sealed class CreateDoctorCommandHandler : IRequestHandler<CreateDoctorCommand, Result<string>>
     {
         private readonly IDoctorRepository _doctorRepository;
         private readonly IUnitOfWork _unitOfWork;
