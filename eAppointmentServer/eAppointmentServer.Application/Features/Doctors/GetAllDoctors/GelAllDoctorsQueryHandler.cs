@@ -6,11 +6,11 @@ using TS.Result;
 
 namespace eAppointmentServer.Application.Features.Doctors.GetAllDoctors
 {
-    internal sealed class GelAllDoctorsQueryHandler : IRequestHandler<GetAllDoctorsQuery, Result<List<Doctor>>>
+    internal sealed class GetAllDoctorQueryHandler : IRequestHandler<GetAllDoctorsQuery, Result<List<Doctor>>>
     {
         private readonly IDoctorRepository doctorRepository;
 
-        public GelAllDoctorsQueryHandler(IDoctorRepository doctorRepository)
+        public GetAllDoctorQueryHandler(IDoctorRepository doctorRepository)
         {
             this.doctorRepository = doctorRepository;
         }

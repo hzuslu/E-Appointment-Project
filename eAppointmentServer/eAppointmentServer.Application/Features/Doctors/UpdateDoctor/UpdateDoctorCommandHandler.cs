@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using eAppointmentServer.Application.Features.Doctors.UpdateDoctor;
 using eAppointmentServer.Domain.Entities;
 using eAppointmentServer.Domain.Repositories;
 using GenericRepository;

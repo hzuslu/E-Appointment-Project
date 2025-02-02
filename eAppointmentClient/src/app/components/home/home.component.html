@@ -1,1 +1,47 @@
-<p>home works!</p>
+<div class="mt-3 d-flex justify-content-between align-items-center">
+	<h3 class="fw-bold text-primary">Welcome to e-Appointment Application</h3>
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb bg-light p-2 rounded">
+			<li class="breadcrumb-item">
+				<a routerLink="/" class="text-decoration-none">Home</a>
+			</li>
+		</ol>
+	</nav>
+</div>
+
+<div class="mt-4">
+	<div class="row g-3">
+		<!-- Department Selection -->
+		<div class="col-xl-3 col-lg-4 col-md-6">
+			<label for="departmentSelect" class="form-label fw-semibold">Department</label>
+			<select id="departmentSelect" name="department" [(ngModel)]="selectedDepartmentValue"
+				class="form-select shadow-sm">
+				<option [value]="0">Select a department...</option>
+				@for (department of departmentList; track department) {
+				<option [value]="department.value">{{ department.name }}</option>
+				}
+			</select>
+		</div>
+		@if (selectedDepartmentValue > 0) {
+		<div class="col-xl-3 col-lg-4 col-md-6">
+			<label for="doctorSelect" class="form-label fw-semibold">Doctor</label>
+			<select id="doctorSelect" name="doctor" [(ngModel)]="selectedDoctorId" class="form-select shadow-sm"
+				[disabled]="selectedDepartmentValue <= 0">
+				<option value="">Select a doctor...</option>
+				@for (doctor of doctorList; track doctor) {
+				<option [value]="doctor.id">{{ doctor.fullName }}</option>
+				}
+			</select>
+		</div>
+		}
+	</div>
+
+	@if(selectedDoctorId){
+
+	<div class="mt-4">
+		<dx-scheduler [dataSource]="appointments" currentView="week" [startDayHour]="9" [endDayHour]="18"
+			[showAllDayPanel]="false">
+		</dx-scheduler>
+	</div>
+	}
+</div>
