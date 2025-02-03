@@ -14,7 +14,7 @@
 		<!-- Department Selection -->
 		<div class="col-xl-3 col-lg-4 col-md-6">
 			<label for="departmentSelect" class="form-label fw-semibold">Department</label>
-			<select id="departmentSelect" name="department" [(ngModel)]="selectedDepartmentValue"
+			<select id="departmentSelect" name="department" (change)="getDoctorByDepartment()" [(ngModel)]="selectedDepartmentValue"
 				class="form-select shadow-sm">
 				<option [value]="0">Select a department...</option>
 				@for (department of departmentList; track department) {
@@ -25,7 +25,7 @@
 		@if (selectedDepartmentValue > 0) {
 		<div class="col-xl-3 col-lg-4 col-md-6">
 			<label for="doctorSelect" class="form-label fw-semibold">Doctor</label>
-			<select id="doctorSelect" name="doctor" [(ngModel)]="selectedDoctorId" class="form-select shadow-sm"
+			<select id="doctorSelect" name="doctor" (change)="getAllAppointmentsByDoctorId()" [(ngModel)]="selectedDoctorId" class="form-select shadow-sm"
 				[disabled]="selectedDepartmentValue <= 0">
 				<option value="">Select a doctor...</option>
 				@for (doctor of doctorList; track doctor) {
@@ -39,8 +39,8 @@
 	@if(selectedDoctorId){
 
 	<div class="mt-4">
-		<dx-scheduler [dataSource]="appointments" currentView="week" [startDayHour]="9" [endDayHour]="18"
-			[showAllDayPanel]="false">
+		<dx-scheduler [dataSource]="appointmentList" currentView="week" [startDayHour]="9" [endDayHour]="18"
+			[showAllDayPanel]="false" textExpr="title">
 		</dx-scheduler>
 	</div>
 	}

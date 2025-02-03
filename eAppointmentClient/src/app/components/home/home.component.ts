@@ -5,6 +5,8 @@ import { HttpService } from '../../services/http.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DxSchedulerModule } from 'devextreme-angular';
+import { SwalService } from '../../services/swal.service';
+import { AppointmentModel } from '../../models/appointment.model';
 
 @Component({
   selector: 'app-home',
@@ -16,40 +18,39 @@ import { DxSchedulerModule } from 'devextreme-angular';
 export class HomeComponent implements OnInit {
 
   constructor(
-    private _httpService: HttpService
+    private _httpService: HttpService,
+    private _swalService: SwalService
   ) {
   }
+
   ngOnInit(): void {
-    this.getDoctorList()
   }
 
   departmentList = departmentList
   doctorList: DoctorModel[] = []
-  appointments: any = [
-    {
-      startDate: new Date("2025-02-02 09:00"),
-      endDate: new Date("2025-02-02 09:30"),
-      title: "Hasan Uslu"
-    },
-    {
-      startDate: new Date("2025-02-02 10:00"),
-      endDate: new Date("2025-02-02 10:30"),
-      title: "Ahmet Demir"
-    },
-    {
-      startDate: new Date("2025-02-02 11:00"),
-      endDate: new Date("2025-02-02 11:30"),
-      title: "Mehmet Yalçın"
-    },
-
-  ]
-
+  appointmentList: AppointmentModel[] = []
   selectedDepartmentValue: number = 0;
   selectedDoctorId: string = ""
 
-  getDoctorList() {
-    this._httpService.post<DoctorModel[]>("Doctors/GetAllDoctors", {}, res => {
-      this.doctorList = res.data;
-    })
+  getDoctorByDepartment() {
+    if (this.selectedDepartmentValue > 0) {
+      let tempDoctorId = this.selectedDoctorId;
+      this.selectedDoctorId = "";
+      this._httpService.post<DoctorModel[]>("Appointments/GetAllDoctorsByDepartment", { departmentId: this.selectedDepartmentValue }, res => {
+        this.doctorList = res.data;
+        if (this.doctorList.length == 0) {
+          this._swalService.callToast("There is no doctor with the selected department", 'warning');
+        }
+
+      })
+    }
+  }
+
+  getAllAppointmentsByDoctorId() {
+    if (this.selectedDoctorId) {
+      this._httpService.post<AppointmentModel[]>("Appointments/GetAllAppointmentsByDoctorId", { doctorId: this.selectedDoctorId }, res => {
+        this.appointmentList = res.data;
+      })
+    }
   }
 }
