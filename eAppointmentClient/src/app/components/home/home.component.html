@@ -1,47 +1,191 @@
 <div class="mt-3 d-flex justify-content-between align-items-center">
-	<h3 class="fw-bold text-primary">Welcome to e-Appointment Application</h3>
-	<nav aria-label="breadcrumb">
-		<ol class="breadcrumb bg-light p-2 rounded">
-			<li class="breadcrumb-item">
-				<a routerLink="/" class="text-decoration-none">Home</a>
-			</li>
-		</ol>
-	</nav>
+  <h3 class="fw-bold text-primary">Welcome to e-Appointment Application</h3>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-light p-2 rounded">
+      <li class="breadcrumb-item">
+        <a routerLink="/" class="text-decoration-none">Home</a>
+      </li>
+    </ol>
+  </nav>
 </div>
 
 <div class="mt-4">
-	<div class="row g-3">
-		<!-- Department Selection -->
-		<div class="col-xl-3 col-lg-4 col-md-6">
-			<label for="departmentSelect" class="form-label fw-semibold">Department</label>
-			<select id="departmentSelect" name="department" (change)="getDoctorByDepartment()" [(ngModel)]="selectedDepartmentValue"
-				class="form-select shadow-sm">
-				<option [value]="0">Select a department...</option>
-				@for (department of departmentList; track department) {
-				<option [value]="department.value">{{ department.name }}</option>
-				}
-			</select>
-		</div>
-		@if (selectedDepartmentValue > 0) {
-		<div class="col-xl-3 col-lg-4 col-md-6">
-			<label for="doctorSelect" class="form-label fw-semibold">Doctor</label>
-			<select id="doctorSelect" name="doctor" (change)="getAllAppointmentsByDoctorId()" [(ngModel)]="selectedDoctorId" class="form-select shadow-sm"
-				[disabled]="selectedDepartmentValue <= 0">
-				<option value="">Select a doctor...</option>
-				@for (doctor of doctorList; track doctor) {
-				<option [value]="doctor.id">{{ doctor.fullName }}</option>
-				}
-			</select>
-		</div>
-		}
-	</div>
+  <div class="row g-3">
+    <!-- Department Selection -->
+    <div class="col-xl-3 col-lg-4 col-md-6">
+      <label for="departmentSelect" class="form-label fw-semibold"
+        >Department</label
+      >
+      <select
+        id="departmentSelect"
+        name="department"
+        (change)="getDoctorByDepartment()"
+        [(ngModel)]="selectedDepartmentValue"
+        class="form-select shadow-sm"
+      >
+        <option [value]="0">Select a department...</option>
+        @for (department of departmentList; track department) {
+        <option [value]="department.value">
+          {{ department.name }}
+        </option>
+        }
+      </select>
+    </div>
+    @if (selectedDepartmentValue > 0) {
+    <div class="col-xl-3 col-lg-4 col-md-6">
+      <label for="doctorSelect" class="form-label fw-semibold">Doctor</label>
+      <select
+        id="doctorSelect"
+        name="doctor"
+        (change)="getAllAppointmentsByDoctorId()"
+        [(ngModel)]="selectedDoctorId"
+        class="form-select shadow-sm"
+        [disabled]="selectedDepartmentValue <= 0"
+      >
+        <option value="">Select a doctor...</option>
+        @for (doctor of doctorList; track doctor) {
+        <option [value]="doctor.id">
+          {{ doctor.fullName }}
+        </option>
+        }
+      </select>
+    </div>
+    }
+  </div>
 
-	@if(selectedDoctorId){
+  @if(selectedDoctorId){
+  <div class="mt-4">
+    <dx-scheduler
+      [dataSource]="appointmentList"
+      currentView="week"
+      [startDayHour]="9"
+      [endDayHour]="18"
+      [showAllDayPanel]="false"
+      textExpr="title"
+      (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
+      (onAppointmentDeleted)="onAppointmentDeleted($event)"
+      (onAppointmentDeleting)="onAppointmentDeleting($event)"
+	  (onAppointmentUpdating)="onAppointmentUpdating($event)"
+    >
+    </dx-scheduler>
+  </div>
+  }
+</div>
 
-	<div class="mt-4">
-		<dx-scheduler [dataSource]="appointmentList" currentView="week" [startDayHour]="9" [endDayHour]="18"
-			[showAllDayPanel]="false" textExpr="title">
-		</dx-scheduler>
-	</div>
-	}
+<!-- Create Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title">Create Appointment</h5>
+        <button
+          type="button"
+          #addModalCloseBtn
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form
+        #addForm="ngForm"
+        formValidate
+        autocomplete="off"
+        (ngSubmit)="create(addForm)"
+      >
+        <div class="modal-body">
+          <div class="alert alert-primary text-center">
+            <strong
+              >{{ createModel.startDate }} - {{ createModel.endDate }}</strong
+            >
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Identity Number</label>
+              <input
+                type="text"
+                [(ngModel)]="createModel.identityNumber"
+                (change)="getPatient()"
+                name="createIdentityNumber"
+                class="form-control"
+                required
+                minlength="3"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">First Name</label>
+              <input
+                type="text"
+                [(ngModel)]="createModel.firstName"
+                [disabled]="createModel.patientId != null"
+                name="createFirstName"
+                class="form-control"
+                required
+                minlength="3"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Last Name</label>
+              <input
+                type="text"
+                [(ngModel)]="createModel.lastName"
+                [disabled]="createModel.patientId != null"
+                name="createLastName"
+                class="form-control"
+                required
+                minlength="3"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">City</label>
+              <input
+                type="text"
+                [(ngModel)]="createModel.city"
+                [disabled]="createModel.patientId != null"
+                name="createCity"
+                class="form-control"
+                required
+                minlength="3"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Town</label>
+              <input
+                type="text"
+                [(ngModel)]="createModel.town"
+                [disabled]="createModel.patientId != null"
+                name="createTown"
+                class="form-control"
+                required
+                minlength="3"
+              />
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">Full Address</label>
+              <textarea
+                id="createFullAddress"
+                [(ngModel)]="createModel.fullAddress"
+                [disabled]="createModel.patientId != null"
+                name="createFullAddress"
+                class="form-control"
+                required
+                minlength="3"
+                rows="3"
+                placeholder="Enter full address..."
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="submit"
+            class="btn btn-dark w-100"
+            [disabled]="!addForm.valid"
+          >
+            Create Appointment
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

@@ -21,6 +21,10 @@ namespace eAppointmentServer.Application.Features.Patients.CreatePatient
 
         public async Task<Result<string>> Handle(CreatePatientCommand request, CancellationToken cancellationToken)
         {
+            var existPatient = await _patientRepository.FirstOrDefaultAsync(p => p.IdentityNumber == request.IdentityNumber);
+            if(existPatient != null)
+                return Result<string>.Failure("Identity number must be unique");
+
 
             Patient patient = _mapper.Map<Patient>(request);
 
