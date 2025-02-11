@@ -5,25 +5,33 @@ import { api } from '../constants';
 import { ErrorService } from './error.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class HttpService {
+  token: string = localStorage.getItem('token') ?? '';
 
-  constructor(
-    private http: HttpClient,
-    private _errorService: ErrorService
-  ) { }
+  constructor(private http: HttpClient, private _errorService: ErrorService) {}
 
-  post<T>(api_url: string, body: any, callback: (res: ResultModel<T>) => void, errCallBack?: (err: HttpErrorResponse) => void) {
-    this.http.post<ResultModel<T>>(`${api}/${api_url}`, body).subscribe({
-      next: (res => {
-        if (res.data !== null || res.data !== undefined) callback(res)
+  post<T>(
+    api_url: string,
+    body: any,
+    callback: (res: ResultModel<T>) => void,
+    errCallBack?: (err: HttpErrorResponse) => void
+  ) {
+    this.http
+      .post<ResultModel<T>>(`${api}/${api_url}`, body, {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+        },
       })
-      ,
-      error: ((err: HttpErrorResponse) => {
-        if (errCallBack != undefined) errCallBack(err)
-        this._errorService.errorHandler(err)
-      })
-    })
+      .subscribe({
+        next: (res) => {
+          if (res.data !== null && res.data !== undefined) callback(res);
+        },
+        error: (err: HttpErrorResponse) => {
+          if (errCallBack !== undefined) errCallBack(err);
+          this._errorService.errorHandler(err);
+        },
+      });
   }
 }

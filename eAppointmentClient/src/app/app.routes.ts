@@ -7,33 +7,38 @@ import { inject } from '@angular/core';
 import { AuthService } from './services/auth.service';
 import { DoctorComponent } from './components/doctor/doctor.component';
 import { PatientComponent } from './components/patient/patient.component';
+import { UserComponent } from './components/user/user.component';
 
 export const routes: Routes = [
-    {
-        path: "login",
-        component: LoginComponent
-    },
-    {
-        path: "",
-        component: LayoutsComponent,
-        canActivateChild: [() => inject(AuthService).isAuthenticated()],
-        children: [
-            {
-                path: "",
-                component: HomeComponent
-            },
-            {
-                path: "doctors",
-                component: DoctorComponent
-            },
-            {
-                path: "patients",
-                component: PatientComponent
-            }
-        ]
-    },
-    {
-        path: "**",
-        component: NotFoundComponent,
-    }
+  {
+    path: 'login',
+    component: LoginComponent,
+  },
+  {
+    path: '',
+    component: LayoutsComponent,
+    canActivateChild: [() => inject(AuthService).isAuthenticated()],
+    children: [
+      {
+        path: '',
+        component: HomeComponent,
+      },
+      {
+        path: 'doctors',
+        component: DoctorComponent,
+      },
+      {
+        path: 'patients',
+        component: PatientComponent,
+      },
+      {
+        path: 'users',
+        component: UserComponent,
+      },
+    ],
+  },
+  {
+    path: '**',
+    component: NotFoundComponent,
+  },
 ];
